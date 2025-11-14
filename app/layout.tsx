@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import { QueryProvider } from "./components/query-provider";
 
 export const metadata: Metadata = {
-  title: "My Next App",
-  description: "Next.js + TypeScript + shadcn + React Query + Tailwind + Axios",
+  title: "Ergastirio Manager",
 };
 
 export default function RootLayout({
@@ -17,7 +16,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background text-foreground antialiased",
+          "bg-background text-foreground antialiased",
           "flex flex-col"
         )}
       >
