@@ -20,7 +20,9 @@ export default function RootLayout({
           "flex flex-col"
         )}
       >
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          {children} <h1>test</h1>
+        </QueryProvider>
       </body>
     </html>
   );
