@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { QueryProvider } from "./components/query-provider";
+import { QueryProvider } from "../components/query-provider";
 
 export const metadata: Metadata = {
   title: "Ergastirio Manager",
