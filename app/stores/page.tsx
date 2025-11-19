@@ -1,4 +1,3 @@
-import Image from "next/image";
 import StoreCard from "@/components/store-card";
 import { IStoreInfo } from "@/lib/interfaces";
 

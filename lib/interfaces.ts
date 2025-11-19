@@ -20,19 +20,22 @@ export interface IProductCategories {
 }
 
 export interface IProductItem {
-    SUPPLIER: string;
-    ITEMUID: string;
-    CODE: string;
-    FULL_DESCRIPTION: string;
-    TITLE: string;
-    DESCRIPTION: string;
-    PRICE_PER_MU1: string;
-    INVOICE_UNIT: string;
-    ORDER_UNIT: string;
-    SXESI: string;
-    MANUFACTOR: string;
-    CATEGORY: string;
-    IMAGE?: string;
-    MARKA: string;
-    FAMILY: string;
-}
+  SUPPLIER: string;
+  MTRL: string;
+  CODE: string;
+  FULL_DESCRIPTION: string;
+  TITLE: string;
+  DESCRIPTION: string;
+  PRICE_PER_MU1: string;   
+  INVOICE_UNIT: string;
+  ORDER_UNIT: string;
+  SXESI: string;
+  MANUFACTOR: string;
+  CATEGORY: string;
+  MARKA: string;
+  FAMILY: string;
+  IMAGE?: string;
+};
+
+
+
