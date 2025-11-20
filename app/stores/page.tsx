@@ -55,7 +55,7 @@ export default function Stores() {
 
     return (
         data.map(item => (
-            <StoreCard data={item} />
+            <StoreCard data={item} key={item.BRANCH} /> //added a key
         ))
     );
 }
