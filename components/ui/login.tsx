@@ -12,17 +12,31 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useVatToPin } from "@/app/hooks/useVatToPin";
+import { useVerifyPin } from "@/app/hooks/useVerifyPin";
 
 export function LoginCard() {
-  const pinRefs = React.useRef<Array<HTMLInputElement | null>>([]);
+  const router = useRouter();
 
+  const [vat, setVat] = React.useState("");
+  const [backendPin, setBackendPin] = React.useState<string | null>(null);
+
+  const pinRefs = React.useRef<Array<HTMLInputElement | null>>([]);
+  const [enteredPin, setEnteredPin] = React.useState(Array(6).fill(""));
+
+  // React Query mutations
+  const vatMutation = useVatToPin();
+  const pinMutation = useVerifyPin();
+
+  // ---------------------------------------------------------
+  // PIN input logic (unchanged)
+  // ---------------------------------------------------------
   const handlePinChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-
     const raw = e.target.value.replace(/\D/g, "");
-
     if (!raw) {
       e.target.value = "";
       return;
@@ -31,10 +45,17 @@ export function LoginCard() {
     const digit = raw.slice(-1);
     e.target.value = digit;
 
-    const nextIndex = index + 1;
-    if (nextIndex < pinRefs.current.length) {
-      pinRefs.current[nextIndex]?.focus();
-      pinRefs.current[nextIndex]?.select();
+    const updated = [...enteredPin];
+    updated[index] = digit;
+    setEnteredPin(updated);
+
+    if (index < 5) {
+      pinRefs.current[index + 1]?.focus();
+      pinRefs.current[index + 1]?.select();
+    }
+
+    if (updated.every((d) => d !== "")) {
+      onSubmitPin(updated.join(""));
     }
   };
 
@@ -43,20 +64,60 @@ export function LoginCard() {
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Backspace") {
-      const current = e.currentTarget.value;
-
-      if (current) {
-        e.currentTarget.value = "";
+      if (enteredPin[index]) {
+        const updated = [...enteredPin];
+        updated[index] = "";
+        setEnteredPin(updated);
         return;
       }
-
-      const prevIndex = index - 1;
-      if (prevIndex >= 0) {
+      if (index > 0) {
         e.preventDefault();
-        pinRefs.current[prevIndex]?.focus();
-        pinRefs.current[prevIndex]?.select();
+        pinRefs.current[index - 1]?.focus();
+        pinRefs.current[index - 1]?.select();
       }
     }
+  };
+
+  // ---------------------------------------------------------
+  // STEP 1 — Submit VAT
+  // ---------------------------------------------------------
+  const onSubmitVat = async () => {
+    vatMutation.mutate(vat, {
+      onSuccess: (pinA) => {
+        if (!pinA) {
+          alert("Δεν βρέθηκε PIN για αυτό το ΑΦΜ.");
+          return;
+        }
+
+        setBackendPin(pinA);
+
+        // focus PIN first box
+        setTimeout(() => pinRefs.current[0]?.focus(), 100);
+      },
+
+      onError: () => {
+        alert("Σφάλμα κατά την επικοινωνία με τον διακομιστή.");
+      },
+    });
+  };
+
+  // ---------------------------------------------------------
+  // STEP 2 — Submit PIN
+  // ---------------------------------------------------------
+  const onSubmitPin = (pin: string) => {
+    if (pin !== backendPin) {
+      alert("Λάθος PIN");
+      return;
+    }
+
+    pinMutation.mutate(pin, {
+      onSuccess: () => {
+        router.push("/");
+      },
+      onError: () => {
+        alert("Αποτυχία σύνδεσης.");
+      },
+    });
   };
 
   return (
@@ -69,45 +130,64 @@ export function LoginCard() {
       </CardHeader>
 
       <CardContent>
-        <form>
-          <div className="flex flex-col gap-6">
-            {/* AFM */}
+        <div className="flex flex-col gap-6">
+          {/* VAT INPUT */}
+          {!backendPin && (
             <div className="grid gap-2">
               <Label htmlFor="AFM">ΑΦΜ</Label>
               <Input
                 id="AFM"
                 type="text"
+                value={vat}
+                onChange={(e) => setVat(e.target.value)}
                 placeholder="Πληκτρολογήστε το ΑΦΜ σας"
                 required
               />
             </div>
+          )}
 
-            {/* 6-digit PIN */}
+          {/* PIN INPUT (only after VAT is validated) */}
+          {backendPin && (
             <div className="grid gap-2">
               <Label>6-ψήφιο PIN</Label>
               <div className="flex gap-2">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <Input
                     key={i}
-                    ref={el => (pinRefs.current[i] = el)}
-                    inputMode="numeric"
+                    ref={(el) => (pinRefs.current[i] = el)}
                     maxLength={1}
-                    className="h-12 w-12 text-center text-xl font-semibold tracking-widest"
-                    onChange={e => handlePinChange(i, e)}
-                    onKeyDown={e => handlePinKeyDown(i, e)}
-                    required
+                    inputMode="numeric"
+                    className="h-12 w-12 text-center text-xl font-semibold"
+                    onChange={(e) => handlePinChange(i, e)}
+                    onKeyDown={(e) => handlePinKeyDown(i, e)}
                   />
                 ))}
               </div>
             </div>
-          </div>
-        </form>
+          )}
+        </div>
       </CardContent>
 
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
-          Είσοδος
-        </Button>
+        {!backendPin ? (
+          <Button
+            className="w-full"
+            onClick={onSubmitVat}
+            disabled={vatMutation.isPending}
+          >
+            {vatMutation.isPending ? "Παρακαλώ περιμένετε..." : "Συνέχεια"}
+          </Button>
+        ) : (
+          <Button
+            className="w-full"
+            onClick={() => onSubmitPin(enteredPin.join(""))}
+            disabled={pinMutation.isPending}
+          >
+            {pinMutation.isPending
+              ? "Γίνεται επαλήθευση..."
+              : "Επιβεβαίωση PIN"}
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );
