@@ -1,5 +1,6 @@
 "use client"
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardProduct } from "@/components/cart-product";
 import { CartTotals } from "@/components/cart-totals";
 import { ICartProductItem } from "@/lib/interfaces";
@@ -146,15 +147,29 @@ const data: ICartProductItem[] =
 export default function Cart() {
 
     return (
-        <>
-            {data.map(item => (
-                <CardProduct item={item} key={item.MTRL} />
-            ))
-            }
-            <CartTotals items={data} />
-        </>
+        <div className="flex gap-6">
+            <div className="basis-2/3 mt-6">
+                <Card className="border border-slate-200/80 shadow-sm rounded-2xl bg-white">
 
+                    <CardHeader className="px-5 py-0">
+                        <CardTitle className="text-base sm:text-lg">
+                            Σύνοψη Παραγγελίας
+                        </CardTitle>
+                    </CardHeader>
 
+                    <CardContent className="px-5 pt-0 pb-4 space-y-3 text-sm">
+                        {data.map((item) => (
+                            <CardProduct key={item.MTRL} item={item} />
+                        ))}
+                    </CardContent>
+
+                </Card>
+            </div>
+
+            <div className="basis-1/3 mt-6">
+                <CartTotals items={data} />
+            </div>
+        </div>
 
     );
 }

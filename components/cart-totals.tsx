@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,13 +35,13 @@ export function CartTotals({ items, onSendOrder }: CartTotalsProps) {
     };
 
     return (
-        <Card className="mt-6 max-w-md ml-auto border-slate-200/80 shadow-sm rounded-2xl">
-            <CardHeader className="pb-2">
+        <Card className="max-w-md ml-auto border-slate-200/80 shadow-sm rounded-2xl bg-white">
+            <CardHeader className="px-5 py-0">
                 <CardTitle className="text-base sm:text-lg">
                     Σύνολο Παραγγελίας
                 </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm">
+            <CardContent className="px-5 pt-0 pb-4 space-y-3 text-sm">
                 <div className="flex items-center justify-between">
                     <span className="text-slate-500">Σύνολο τεμαχίων</span>
                     <span className="font-semibold">{totals.totalQty}</span>
@@ -68,5 +67,6 @@ export function CartTotals({ items, onSendOrder }: CartTotalsProps) {
                 </div>
             </CardContent>
         </Card>
+
     );
 }
