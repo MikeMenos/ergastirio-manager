@@ -25,13 +25,9 @@ export function LoginCard() {
   const pinRefs = React.useRef<Array<HTMLInputElement | null>>([]);
   const [enteredPin, setEnteredPin] = React.useState(Array(6).fill(""));
 
-  // React Query mutations
   const vatMutation = useVatToPin();
   const pinMutation = useVerifyPin();
 
-  // ---------------------------------------------------------
-  // PIN input logic (unchanged)
-  // ---------------------------------------------------------
   const handlePinChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
@@ -78,9 +74,6 @@ export function LoginCard() {
     }
   };
 
-  // ---------------------------------------------------------
-  // STEP 1 — Submit VAT
-  // ---------------------------------------------------------
   const onSubmitVat = async () => {
     vatMutation.mutate(vat, {
       onSuccess: (pinA) => {
@@ -101,9 +94,6 @@ export function LoginCard() {
     });
   };
 
-  // ---------------------------------------------------------
-  // STEP 2 — Submit PIN
-  // ---------------------------------------------------------
   const onSubmitPin = (pin: string) => {
     if (pin !== backendPin) {
       alert("Λάθος PIN");
@@ -146,7 +136,6 @@ export function LoginCard() {
             </div>
           )}
 
-          {/* PIN INPUT (only after VAT is validated) */}
           {backendPin && (
             <div className="grid gap-2">
               <Label>6-ψήφιο PIN</Label>
@@ -154,7 +143,9 @@ export function LoginCard() {
                 {Array.from({ length: 6 }).map((_, i) => (
                   <Input
                     key={i}
-                    ref={(el) => (pinRefs.current[i] = el)}
+                    ref={(el) => {
+                      pinRefs.current[i] = el;
+                    }}
                     maxLength={1}
                     inputMode="numeric"
                     className="h-12 w-12 text-center text-xl font-semibold"
