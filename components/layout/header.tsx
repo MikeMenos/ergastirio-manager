@@ -10,6 +10,9 @@ import Link from "next/link"
 import Image from "next/image"
 
 export default function Header() {
+
+  
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 dark:bg-black/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-5xl items-center gap-4 px-4">

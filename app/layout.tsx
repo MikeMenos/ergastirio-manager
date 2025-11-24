@@ -16,9 +16,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("bg-background text-foreground antialiased", "flex flex-col")}>
+      <body className={cn("bg-background text-foreground antialiased max-w-7xl mx-auto", "flex flex-col")}>
         <Header />
-        
         <QueryProvider>{children}</QueryProvider>
         <Footer />
       </body>
