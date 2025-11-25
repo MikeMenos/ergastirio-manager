@@ -149,7 +149,7 @@ export default function Cart() {
     return (
         <div className="flex gap-6">
             <div className="basis-2/3 mt-6">
-                <Card className="border border-slate-200/80 shadow-sm rounded-2xl bg-white">
+                <Card className="border border-slate-200/80 shadow-none rounded-2xl bg-white">
 
                     <CardHeader className="px-5 py-0">
                         <CardTitle className="text-base sm:text-lg">

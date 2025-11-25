@@ -35,7 +35,8 @@ export function CartTotals({ items, onSendOrder }: CartTotalsProps) {
     };
 
     return (
-        <Card className="max-w-md ml-auto border-slate-200/80 shadow-sm rounded-2xl bg-white">
+        <Card className="bg-slate-50 border border-slate-200 rounded-2xl shadow-none p-6">
+
             <CardHeader className="px-5 py-0">
                 <CardTitle className="text-base sm:text-lg">
                     Σύνολο Παραγγελίας

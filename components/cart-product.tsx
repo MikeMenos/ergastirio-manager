@@ -16,7 +16,7 @@ export function CardProduct({ item }: ICartProductProps) {
     const lineTotal = qty * pricePerUnit;
 
     return (
-        <Card className="border border-slate-200/80 shadow-sm rounded-2xl">
+        <Card className="border border-slate-200/80 shadow-none rounded-2xl">
             <CardContent className="p-4 sm:p-5">
                 <div className="flex gap-4 sm:gap-5">
                     {/* Image */}

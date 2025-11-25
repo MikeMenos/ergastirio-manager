@@ -1,3 +1,9 @@
+export interface ClientResponse {
+  success: boolean;
+  count: number;
+  data: IStoreInfo[];
+}
+
 export interface IStoreInfo {
   TRDR: string
   KEY_CODE: string
