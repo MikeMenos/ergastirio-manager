@@ -147,17 +147,17 @@ const data: ICartProductItem[] =
 export default function Cart() {
 
     return (
-        <div className="flex gap-6">
+        <div className="flex gap-6 bg-slate-100 px-5">
             <div className="basis-2/3 mt-6">
-                <Card className="border border-slate-200/80 shadow-none rounded-2xl bg-white">
+                <Card className="border border-slate-200/80 shadow-none rounded-2xl bg-white p-6">
 
-                    <CardHeader className="px-5 py-0">
+                    <CardHeader py-0 border-b border-slate-200>
                         <CardTitle className="text-base sm:text-lg">
                             Σύνοψη Παραγγελίας
                         </CardTitle>
                     </CardHeader>
 
-                    <CardContent className="px-5 pt-0 pb-4 space-y-3 text-sm">
+                    <CardContent className="pb-4 space-y-3 text-sm p-0">
                         {data.map((item) => (
                             <CardProduct key={item.MTRL} item={item} />
                         ))}
