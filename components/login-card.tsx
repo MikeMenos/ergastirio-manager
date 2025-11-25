@@ -19,7 +19,7 @@ import { useGetClientData } from "@/app/hooks/useGetClientData";
 
 export function LoginCard() {
   const router = useRouter();
-  const { vat, setVat } = appStore();
+  const { setVat } = appStore();
 
   const [localVat, setLocalVat] = React.useState("");
   const [backendPin, setBackendPin] = React.useState<string | null>(null);
@@ -27,37 +27,8 @@ export function LoginCard() {
   const pinRefs = React.useRef<Array<HTMLInputElement | null>>([]);
   const [enteredPin, setEnteredPin] = React.useState(Array(6).fill(""));
 
-  const {
-    data: vatData,
-    isLoading: vatLoading,
-    isError: vatError,
-  } = useGetClientData(vat);
-
+  const clientDataMutation = useGetClientData();
   const pinMutation = useVerifyPin();
-
-  React.useEffect(() => {
-    if (!vatData) return;
-
-    const pinFromBackend = vatData.data?.[0]?.PIN_A;
-
-    if (!pinFromBackend) {
-      alert("Δεν βρέθηκε PIN για αυτό το ΑΦΜ.");
-      setBackendPin(null);
-      return;
-    }
-
-    setBackendPin(pinFromBackend);
-
-    // focus PIN first box
-    setTimeout(() => pinRefs.current[0]?.focus(), 100);
-  }, [vatData]);
-
-  // react to VAT query error
-  React.useEffect(() => {
-    if (vatError) {
-      alert("Σφάλμα κατά την επικοινωνία με τον διακομιστή.");
-    }
-  }, [vatError]);
 
   const handlePinChange = (
     index: number,
@@ -107,7 +78,16 @@ export function LoginCard() {
 
   const onSubmitVat = () => {
     if (!localVat) return;
-    setVat(localVat);
+
+    clientDataMutation.mutate(localVat, {
+      onSuccess: (data) => {
+        setBackendPin(data.data[0].PIN_A);
+        setVat(data);
+      },
+      onError: () => {
+        alert("Δεν βρέθηκαν στοιχεία για το ΑΦΜ.");
+      },
+    });
   };
 
   const onSubmitPin = (pin: string) => {
@@ -117,12 +97,8 @@ export function LoginCard() {
     }
 
     pinMutation.mutate(pin, {
-      onSuccess: () => {
-        router.push("/");
-      },
-      onError: () => {
-        alert("Αποτυχία σύνδεσης.");
-      },
+      onSuccess: () => router.push("/"),
+      onError: () => alert("Αποτυχία σύνδεσης."),
     });
   };
 
@@ -143,7 +119,6 @@ export function LoginCard() {
               <Label htmlFor="AFM">ΑΦΜ</Label>
               <Input
                 id="AFM"
-                type="text"
                 value={localVat}
                 onChange={(e) => setLocalVat(e.target.value)}
                 placeholder="Πληκτρολογήστε το ΑΦΜ σας"
@@ -152,6 +127,7 @@ export function LoginCard() {
             </div>
           )}
 
+          {/* PIN INPUT */}
           {backendPin && (
             <div className="grid gap-2">
               <Label>6-ψήφιο PIN</Label>
@@ -180,8 +156,11 @@ export function LoginCard() {
           <Button
             className="w-full"
             onClick={onSubmitVat}
+            disabled={clientDataMutation.isPending}
           >
-            {vatLoading ? "Παρακαλώ περιμένετε..." : "Συνέχεια"}
+            {clientDataMutation.isPending
+              ? "Παρακαλώ περιμένετε..."
+              : "Συνέχεια"}
           </Button>
         ) : (
           <Button

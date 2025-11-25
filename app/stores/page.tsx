@@ -1,17 +1,24 @@
-"use client"
+"use client";
 
 import StoreCard from "@/components/store-card";
 import { appStore } from "@/stores/appStore";
-import { useGetClientData } from "../hooks/useGetClientData";
-
+import { useEffect } from "react";
 
 export default function Stores() {
-    const { vat } = appStore();
-    const { data, isLoading, isError } = useGetClientData(vat);
+  const { clientData, hydrated, setHydrated } = appStore();
 
-    return (
-        data?.data.map(item => (
-            <StoreCard data={item} key={item.BRANCH} />
-        ))
-    );
+  useEffect(() => {
+    appStore.persist.rehydrate();
+    setHydrated();
+  }, [setHydrated]);
+  console.log(clientData);
+  if (!hydrated) return null;
+
+  return (
+    <>
+      {clientData?.data.map((item) => (
+        <StoreCard data={item} key={item.BRANCH} />
+      ))}
+    </>
+  );
 }

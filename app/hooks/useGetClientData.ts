@@ -1,14 +1,12 @@
 import { api } from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import type { ClientResponse } from "@/lib/interfaces";
 
-export function useGetClientData(AFM?: string) {
-  return useQuery<ClientResponse>({
-    queryKey: ["vatToPin"],
-    queryFn: async () => {
-      const { data } = await api.post("/get-client-data", { AFM: 996973228 });
+export function useGetClientData() {
+  return useMutation<ClientResponse, Error, string>({
+    mutationFn: async (AFM: string) => {
+      const { data } = await api.post("/get-client-data", { AFM });
       return data;
     },
-    staleTime: 0,
   });
 }
