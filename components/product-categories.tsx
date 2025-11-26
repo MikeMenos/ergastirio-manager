@@ -1,10 +1,10 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { IProductCategories } from "@/lib/interfaces"
+import { IFamilyCategories } from "@/lib/interfaces"
 import { Tag, Grid3X3, Package } from "lucide-react"
 import Link from "next/link"
 
 interface ProductCategoriesProps {
-    data: IProductCategories[]
+    data?: IFamilyCategories[]
 }
 
 export default function ProductCategories({ data }: ProductCategoriesProps) {
@@ -27,7 +27,7 @@ export default function ProductCategories({ data }: ProductCategoriesProps) {
 
             {/* Grid of cards */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {data.map((item) => (
+                {data?.map((item) => (
                     <Link href={`/products/${item.FAMILY}`}>
                         <CategoryCard key={item.FAMILY} family={item.FAMILY} />
                     </Link>

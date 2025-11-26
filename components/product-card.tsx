@@ -30,9 +30,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
     ? priceNum.toFixed(2)
     : product.PRICE_PER_MU1;
 
-  const lineTotal =
-    Number.isFinite(priceNum) && Number.isFinite(qty) ? priceNum * qty : 0;
-
   const handleDecrease = () => {
     setQty((prev) => (prev > 1 ? prev - 1 : 1));
   };

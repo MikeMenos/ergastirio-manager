@@ -21,7 +21,7 @@ export interface IStoreInfo {
   PAYMENT?: string
 }
 
-export interface IProductCategories {
+export interface IFamilyCategories {
   FAMILY: string;
 }
 
@@ -41,6 +41,7 @@ export interface IProductItem {
   MARKA: string;
   FAMILY: string;
   IMAGE?: string;
+  FAV: string;
 };
 
 export interface ICartProductItem {

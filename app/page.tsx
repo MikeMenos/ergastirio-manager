@@ -1,20 +1,15 @@
 "use client";
 
 import ProductCategories from "@/components/product-categories";
-import { IProductCategories } from "@/lib/interfaces";
+import { useGetFamilies } from "@/hooks/useGetFamilies";
 import { appStore } from "@/stores/appStore";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
-const data: IProductCategories[] = [
-  { FAMILY: "DONUT" },
-  { FAMILY: "ΑΛΛΟ" },
-  { FAMILY: "ΑΡΤΟΠΟΙΗΜΑΤΑ" },
-  { FAMILY: "ΣΦΟΛΙΑΤΑ" },
-];
-
 export default function Home() {
-  const { clientData, setHydrated, hydrated } = appStore();
+  const { clientData, setHydrated, hydrated, isStoreSelected } = appStore();
+
+  const { data, isLoading } = useGetFamilies()
 
   useEffect(() => {
     appStore.persist.rehydrate();
@@ -22,7 +17,9 @@ export default function Home() {
   }, [setHydrated]);
 
   if (!hydrated) return null;
-  if (clientData && clientData?.data.length > 1) redirect("/stores");
+  if (clientData && clientData?.count > 1 && !isStoreSelected) redirect("/stores");
+
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-black p-6">

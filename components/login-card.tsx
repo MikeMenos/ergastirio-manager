@@ -19,7 +19,7 @@ import { useVerifyPin } from "@/hooks/useVerifyPin";
 
 export function LoginCard() {
   const router = useRouter();
-  const { setVat } = appStore();
+  const { setClientData } = appStore();
 
   const [localVat, setLocalVat] = React.useState("");
   const [backendPin, setBackendPin] = React.useState<string | null>(null);
@@ -82,7 +82,7 @@ export function LoginCard() {
     clientDataMutation.mutate(localVat, {
       onSuccess: (data) => {
         setBackendPin(data.data[0].PIN_A);
-        setVat(data);
+        setClientData(data);
       },
       onError: () => {
         alert("Δεν βρέθηκαν στοιχεία για το ΑΦΜ.");
