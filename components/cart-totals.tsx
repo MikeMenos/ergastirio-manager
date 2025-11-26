@@ -35,27 +35,27 @@ export function CartTotals({ items, onSendOrder }: CartTotalsProps) {
     };
 
     return (
-        <Card className="border border-slate-200 rounded-2xl shadow-none p-6">
+        <Card className="border border-slate-200 rounded-2xl  bg-slate-100  shadow-none p-6 mt-6">
 
             <CardHeader className="px-5 py-0 border-b border-slate-200">
                 <CardTitle className="text-base sm:text-lg">
                     Σύνολο Παραγγελίας
                 </CardTitle>
             </CardHeader>
-            <CardContent className="px-5 pt-0 pb-4 space-y-3 text-sm">
-                <div className="flex items-center justify-between">
+             <CardContent className="pb-4 space-y-3 text-sm p-0">
+                <div className="px-5 flex items-center justify-between">
                     <span className="text-slate-500">Σύνολο τεμαχίων</span>
                     <span className="font-semibold">{totals.totalQty}</span>
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="px-5 flex items-center justify-between">
                     <span className="text-slate-500">Συνολική αξία</span>
                     <span className="font-semibold text-emerald-600">
                         €{totals.totalAmount.toFixed(2)}
                     </span>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-5">
                     <Button
                         className="w-full gap-2"
                         size="lg"

@@ -1,14 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { IProductItem } from "@/lib/interfaces";
@@ -45,29 +38,33 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
   };
 
   return (
-    <Card className="w-full max-w-2xl rounded-2xl shadow-sm overflow-hidden">
-      <div className="flex flex-col sm:flex-row">
-        {/* IMAGE */}
-        <div className="w-full sm:w-48 h-48 bg-muted flex items-center justify-center overflow-hidden">
-          <img
-            src={product.IMAGE || placeholderImage}
-            alt={product.TITLE}
-            className="w-full h-full object-cover"
-          />
-        </div>
+    <Card className="border border-slate-200/80 shadow-none rounded-2xl bg-white mt-6">
+      <CardContent className="p-4 sm:p-5">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+          {/* IMAGE */}
+          <div className="flex-shrink-0">
+            <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl bg-slate-50 overflow-hidden">
+              <img
+                src={product.IMAGE || placeholderImage}
+                alt={product.TITLE}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
 
-        {/* CONTENT */}
-        <div className="flex-1 flex flex-col">
-          <CardHeader className="pb-2">
+          {/* MIDDLE: TITLE + META */}
+          <div className="flex-1 flex flex-col gap-2 text-sm">
+            {/* Title + category badges */}
             <div className="flex items-start justify-between gap-2">
               <div>
-                <CardTitle className="text-base sm:text-lg">
+                <div className="font-medium text-[15px] sm:text-base">
                   {product.TITLE || product.FULL_DESCRIPTION}
-                </CardTitle>
-                <CardDescription className="text-xs sm:text-sm">
+                </div>
+                <div className="text-xs text-slate-500">
                   {product.DESCRIPTION || product.FULL_DESCRIPTION}
-                </CardDescription>
+                </div>
               </div>
+
               <div className="flex flex-col items-end gap-1">
                 <Badge variant="outline" className="text-[10px] sm:text-xs">
                   {product.CATEGORY}
@@ -77,60 +74,52 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
                 </Badge>
               </div>
             </div>
-          </CardHeader>
 
-          <CardContent className="space-y-2 text-xs sm:text-sm">
-            <div className="grid grid-cols-2 gap-2">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">Κωδικός</span>
-                <span className="tabular-nums">{product.CODE}</span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="font-medium">MTRL</span>
-                <span className="tabular-nums">{product.MTRL}</span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="font-medium">Προμηθευτής</span>
-                <span className="truncate max-w-[8rem] text-right">
-                  {product.SUPPLIER}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="font-medium">Εργαστήρι</span>
-                <span className="truncate max-w-[8rem] text-right">
-                  {product.MANUFACTOR}
-                </span>
-              </div>
-            </div>
-
-            <div className="border-t pt-2 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">Τιμή</span>
-                <span className="font-semibold tabular-nums">
-                  {formattedPrice} / {product.INVOICE_UNIT}
-                </span>
-              </div>
-              <p className="text-[11px] text-muted-foreground">
-                Μονάδα τιμολόγησης: {product.INVOICE_UNIT} · Μονάδα
-                παραγγελίας: {product.ORDER_UNIT} (σχέση: {product.SXESI})
-              </p>
-            </div>
-          </CardContent>
-
-          <CardFooter className="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            {/* Left side: brand + subtotal */}
-            <div className="flex flex-col gap-1 text-xs sm:text-sm">
-              <span className="text-muted-foreground">
-                Μάρκα: {product.MARKA}
+            {/* Info pills (μοιάζει με το cart design) */}
+            <div className="flex flex-wrap gap-2 text-[11px] sm:text-xs text-slate-600">
+              <span className="inline-flex items-center rounded-full border border-slate-200 px-2 py-1">
+                {product.SXESI} τεμάχια / {product.ORDER_UNIT.toLowerCase()}
+              </span>
+              <span className="inline-flex items-center rounded-full border border-slate-200 px-2 py-1">
+                Προμηθευτής:
+                <span className="ml-1 font-medium">{product.SUPPLIER}</span>
               </span>
             </div>
 
-            {/* Right side: qty controls + button */}
-            <div className="flex items-center gap-3">
-              {/* QTY controls */}
+            {/* Extra info line */}
+            <div className="grid grid-cols-2 gap-1 text-[11px] sm:text-xs text-slate-500">
+              <div className="flex gap-1">
+                <span className="font-medium text-slate-600">Κωδικός:</span>
+                <span className="tabular-nums">{product.CODE}</span>
+              </div>
+              <div className="flex gap-1 justify-start sm:justify-end">
+                <span className="font-medium text-slate-600">MTRL:</span>
+                <span className="tabular-nums">{product.MTRL}</span>
+              </div>
+            </div>
+
+            {/* Separator */}
+            <div className="border-t border-slate-100 pt-2 mt-1 text-[11px] sm:text-xs text-slate-500">
+              Μονάδα τιμολόγησης: {product.INVOICE_UNIT} · Μονάδα παραγγελίας:{" "}
+              {product.ORDER_UNIT} (σχέση: {product.SXESI})
+            </div>
+          </div>
+
+          {/* RIGHT: PRICE + QTY + BUTTON (στο ίδιο στυλ με το cart-product) */}
+          <div className="flex flex-col justify-between items-end gap-3 min-w-[130px] sm:min-w-[150px]">
+            {/* Price block */}
+            {/* <div className="text-right">
+              <div className="text-xs text-slate-500">Τιμή</div>
+              <div className="text-base sm:text-lg font-semibold tabular-nums">
+                {formattedPrice}
+              </div>
+              <div className="text-[11px] text-slate-500">
+                / {product.INVOICE_UNIT}
+              </div>
+            </div> */}
+
+            {/* Qty + Add button */}
+            <div className="flex flex-col items-end gap-2">
               <div className="flex items-center gap-1">
                 <Button
                   type="button"
@@ -142,9 +131,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
                 >
                   <Minus className="h-4 w-4" />
                 </Button>
+
                 <div className="min-w-[3rem] text-center text-sm font-medium tabular-nums">
                   {qty}
                 </div>
+
                 <Button
                   type="button"
                   variant="outline"
@@ -156,7 +147,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
                 </Button>
               </div>
 
-              {/* Add to order */}
               <Button
                 size="sm"
                 className="whitespace-nowrap gap-1"
@@ -166,9 +156,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
                 Προσθήκη
               </Button>
             </div>
-          </CardFooter>
+          </div>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 };
