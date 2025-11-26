@@ -1,5 +1,5 @@
+import { verifyPin } from "@/app/login/actions/verifyPin";
 import { useMutation } from "@tanstack/react-query";
-import { verifyPin } from "../login/actions/verifyPin";
 
 export function useVerifyPin() {
   return useMutation({

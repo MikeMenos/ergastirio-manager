@@ -13,9 +13,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useVerifyPin } from "@/app/hooks/useVerifyPin";
 import { appStore } from "@/stores/appStore";
-import { useGetClientData } from "@/app/hooks/useGetClientData";
+import { useGetClientData } from "@/hooks/useGetClientData";
+import { useVerifyPin } from "@/hooks/useVerifyPin";
 
 export function LoginCard() {
   const router = useRouter();
