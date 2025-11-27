@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
     <Card className="border border-slate-200/80 shadow-none rounded-2xl bg-white mt-6">
       <CardContent className="p-4 sm:p-5">
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
-          {/* IMAGE */}
+         
           <div className="flex-shrink-0">
             <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl bg-slate-50 overflow-hidden">
               <img
@@ -52,9 +52,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
             </div>
           </div>
 
-          {/* MIDDLE: TITLE + META */}
+       
           <div className="flex-1 flex flex-col gap-2 text-sm">
-            {/* Title + category badges */}
+           
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="font-medium text-[15px] sm:text-base">
@@ -75,7 +75,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
               </div>
             </div>
 
-            {/* Info pills (μοιάζει με το cart design) */}
+           
             <div className="flex flex-wrap gap-2 text-[11px] sm:text-xs text-slate-600">
               <span className="inline-flex items-center rounded-full border border-slate-200 px-2 py-1">
                 {product.SXESI} τεμάχια / {product.ORDER_UNIT.toLowerCase()}
@@ -86,7 +86,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
               </span>
             </div>
 
-            {/* Extra info line */}
+         
             <div className="grid grid-cols-2 gap-1 text-[11px] sm:text-xs text-slate-500">
               <div className="flex gap-1">
                 <span className="font-medium text-slate-600">Κωδικός:</span>
@@ -98,14 +98,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
               </div>
             </div>
 
-            {/* Separator */}
+         
             <div className="border-t border-slate-100 pt-2 mt-1 text-[11px] sm:text-xs text-slate-500">
               Μονάδα τιμολόγησης: {product.INVOICE_UNIT} · Μονάδα παραγγελίας:{" "}
               {product.ORDER_UNIT} (σχέση: {product.SXESI})
             </div>
           </div>
 
-          {/* RIGHT: PRICE + QTY + BUTTON (στο ίδιο στυλ με το cart-product) */}
+        
           <div className="flex flex-col justify-between items-end gap-3 min-w-[130px] sm:min-w-[150px]">
             {/* Price block */}
             {/* <div className="text-right">
@@ -118,7 +118,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToOrder }) => {
               </div>
             </div> */}
 
-            {/* Qty + Add button */}
+          
             <div className="flex flex-col items-end gap-2">
               <div className="flex items-center gap-1">
                 <Button
