@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Stores() {
-  const { clientData, hydrated, setHydrated, setIsStoreSelected } = appStore();
+  const { clientData, hydrated, setHydrated, setBranchNumber } = appStore();
 
   useEffect(() => {
     appStore.persist.rehydrate();
@@ -18,7 +18,7 @@ export default function Stores() {
   return (
     <>
       {clientData?.data.map((item) => (
-        <Link key={item.BRANCH} href={'/'} onClick={() => setIsStoreSelected(true)}>
+        <Link key={item.BRANCH} href={'/'} onClick={() => setBranchNumber(item.BRANCH)}>
           <StoreCard data={item} />
         </Link>
       ))}

@@ -5,8 +5,8 @@ import { persist } from "zustand/middleware";
 type AppState = {
   clientData?: ClientResponse;
   setClientData: (value: ClientResponse) => void;
-  isStoreSelected?: boolean;
-  setIsStoreSelected: (value: boolean) => void;
+  branchNumber?: string;
+  setBranchNumber: (value: string) => void;
   hydrated: boolean;
   setHydrated: () => void;
 };
@@ -16,8 +16,8 @@ export const appStore = create<AppState>()(
     (set) => ({
       clientData: undefined,
       setClientData: (clientData) => set({ clientData }),
-      isStoreSelected: false,
-      setIsStoreSelected: (isStoreSelected) => set({ isStoreSelected }),
+      branchNumber: undefined,
+      setBranchNumber: (branchNumber) => set({ branchNumber }),
       hydrated: false,
       setHydrated: () => set({ hydrated: true }),
     }),

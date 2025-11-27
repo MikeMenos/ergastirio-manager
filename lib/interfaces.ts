@@ -68,6 +68,23 @@ export interface ICartProductItem {
   FAMILY: string;
 }
 
+export interface IProductInBasket {
+  FINDOC: string;
+  TRDR: string;
+  BRANCH: string;
+  MTRL: string;
+  Qty1: string;
+  Qty2: string;
+  SXESI: string;
+};
+
+export interface ICart {
+  success: boolean;
+  count: number;
+  data: IProductInBasket[];
+};
+
+
 
 
 

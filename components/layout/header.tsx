@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,30 +12,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ShoppingCart, LogOut, ChevronDown } from "lucide-react";
-
-const FAMILIES = ["DONUT", "ΑΛΛΟ", "ΑΡΤΟΠΟΙΗΜΑΤΑ", "ΣΦΟΛΙΑΤΑ"];
+import { useGetCart } from "@/hooks/useGetCart";
+import { appStore } from "@/stores/appStore";
+import { useGetFamilies } from "@/hooks/useGetFamilies";
 
 export default function Header() {
   const pathname = usePathname();
+  const { clientData, branchNumber } = appStore();
 
-  // hide header on login page
+  const currentBranch = clientData?.data.find(item => item.BRANCH === branchNumber);
+
+  const { data: families, isLoading } = useGetFamilies()
+  const { data } = useGetCart({ trdr: currentBranch?.TRDR, branch: branchNumber })
+
   if (pathname === "/login") return null;
 
-  // ---- MOCK DATA (replace with real BRAND / ADDRESS / BRANCHES) ----
-  const branches = [
-    {
-      id: "1",
-      brand: "ERGASTIRI",
-      address: "Λεωφ. Κηφισίας 10, Αθήνα",
-    },
-    {
-      id: "2",
-      brand: "ERGASTIRI 2",
-      address: "Λεωφ. Συγγρού 20, Αθήνα",
-    },
-  ];
-
-  const currentBranch = branches[0];
 
   const handleBranchChange = (id: string) => {
     // TODO: σύνδεσε το με context / state / query param
@@ -50,7 +40,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 dark:bg-black/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-5xl items-center gap-4 px-4">
+      <div className="flex h-16 items-center gap-4 px-4">
 
         {/* LEFT: Logo + Families */}
         <Link href="/" className="flex items-center gap-2">
@@ -63,16 +53,16 @@ export default function Header() {
         {/* Families navigation */}
         <div className="flex-1 overflow-x-auto">
           <nav className="ml-4 flex items-center gap-1 md:gap-2">
-            {FAMILIES.map((family) => (
+            {families?.map((family) => (
               <Button
-                key={family}
+                key={family.FAMILY}
                 asChild
                 variant="ghost"
                 size="sm"
                 className="whitespace-nowrap text-xs font-medium"
               >
-                <Link href={`/products?family=${encodeURIComponent(family)}`}>
-                  {family}
+                <Link href={`/products/${encodeURIComponent(family.FAMILY)}`}>
+                  {family.FAMILY}
                 </Link>
               </Button>
             ))}
@@ -81,25 +71,25 @@ export default function Header() {
 
         {/* RIGHT: Logout, Cart, Store dropdown */}
         <div className="ml-auto flex items-center gap-2 sm:gap-3">
-      
+
           <DropdownMenu>
             <DropdownMenuContent align="end" className="w-64">
               <DropdownMenuLabel>Επιλογή καταστήματος</DropdownMenuLabel>
-              {branches.map((branch) => (
+              {clientData?.data.map((branch) => (
                 <DropdownMenuItem
-                  key={branch.id}
-                  onClick={() => handleBranchChange(branch.id)}
+                  key={branch.BRANCH}
+                  onClick={() => handleBranchChange(branch.BRANCH)}
                 >
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">{branch.brand}</span>
+                    <span className="text-sm font-medium">{branch.NAME}</span>
                     <span className="text-xs text-slate-500">
-                      {branch.address}
+                      {branch.ADDRESS}
                     </span>
                   </div>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
-            
+
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
@@ -110,10 +100,10 @@ export default function Header() {
                     Κατάστημα
                   </span>
                   <span className="text-xs sm:text-sm font-medium leading-tight">
-                    {currentBranch.brand}
+                    {currentBranch?.NAME}
                   </span>
                   <span className="text-[10px] text-slate-500 truncate max-w-[140px] sm:max-w-[200px]">
-                    {currentBranch.address}
+                    {currentBranch?.ADDRESS}
                   </span>
                 </div>
                 <ChevronDown className="h-4 w-4" />
@@ -122,8 +112,15 @@ export default function Header() {
           </DropdownMenu>
 
           <Button variant="ghost" size="icon" asChild>
-            <Link href="/cart" aria-label="Καλάθι">
+            <Link href="/cart" aria-label="Καλάθι" className="relative">
               <ShoppingCart className="h-5 w-5" />
+              {data && data.count > 0 && (
+                <span
+                  className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 text-[10px] font-semibold text-white"
+                >
+                  {data.count}
+                </span>
+              )}
             </Link>
           </Button>
 
